@@ -11,6 +11,9 @@ function validIp(ip) {
 }
 
 function clientIp(request) {
+  // EdgeOne Pages 把客户端信息放在 request.eo（clientIp / geo），header 均不注入
+  const eo = request.eo || {};
+  if (eo.clientIp) return String(eo.clientIp);
   const h = request.headers;
   const xff = (h.get('x-forwarded-for') || '').split(',')[0].trim();
   return xff || h.get('eo-connecting-ip') || h.get('x-real-ip') || '';
